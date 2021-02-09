@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <title>Demo</title>
+
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <base href="/"/>
+</head>
+
+<body>
+    <h1>Home Page</h1>
+    <!--
+    There will be a script that runs by default and tries to get the logged-in user.
+    If a user isn't logged, it will show the login button. If they are logged in,
+    it will greet them.
+    Nothing crazy, just some divs with different ids dependent on the user's login status.
+    -->
+    <div id="unauthenticated" style="display: none">
+        Sign in with GitHub: <a href="/oauth2/authorization/github">click here</a>
+    </div>
+
+    <div id="authenticated" style="display: none">
+        Hello <span id="user"></span>!
+    <!--   Functionality for logout button will be added in the script   -->
+        <button onClick="logout()" class="btn btn-primary">Logout</button>
+    </div>
+
+<!--
+We attempt to fetch the user, and if we get a response, we update the necessary
+info on the page. Lionel put script INSIDE the body.
+-->
+<script>
+
+//Next, we need to add an endpoint in our OAuth2Demo.java file. The changes
+//come after the .oauth2Login().defaultSuccessUrl("/", true).
+
+    async function logout(){
+        let response = await fetch('/logout');
+        if (response.ok){
+            document.getElementById("unauthenticated").style.display = "block";
+            document.getElementById("authenticated").style.display = "none";
+        }
+        else{
+            return null;
+        }
+    }
+
+    async function checkLoggedIn(){
+        let response = await fetch('/user');
+        if (response.ok){
+            let userInfo = await response.json();
+//change line to userInfo.name when application user method returns stmt is changed
+            document.getElementById("user").innerHTML = userInfo.login;
+            document.getElementById("unauthenticated").style.display = "none";
+            document.getElementById("authenticated").style.display = "block";
+        }
+        else{
+            document.getElementById("unauthenticated").style.display = "block";
+            document.getElementById("authenticated").style.display = "none";
+        }
+    }
+    checkLoggedIn();
+
+</script>
+
+</body>
+
+</html>
+

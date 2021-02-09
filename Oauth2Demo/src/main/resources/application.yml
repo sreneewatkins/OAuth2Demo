@@ -1,0 +1,12 @@
+# To integrate this with our website, we'll need to create a new file in the
+# resources folder, application.yml. This will allow our application to do things
+# with our GitHub OAuth on startup.
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: d51b79f97e767f996174
+            clientSecret: 46063b58ac4f5d82d1db750cd308342012519e45
